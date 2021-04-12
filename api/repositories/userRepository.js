@@ -6,13 +6,9 @@ class userRepository {
 
 
      getUsersPerLocation=async(city)=>{
-        const [data,error] = this.getStoreDataForCity(city) ||  await awaitTo(User.find({city}).exec());
+        const [error,data] = types.store[city]?['',types.store[city]]:await awaitTo(User.find({city}).exec());
         types.store[city]=data || types.store[city];
-        return [data,error];
-    }
-
-     getStoreDataForCity=async(city)=>{
-        return [types.store[city],''];
+        return [error,data];
     }
 
 
@@ -21,11 +17,12 @@ class userRepository {
     }
 
 
-    getCategoryItems=async(workType)=>{
-         return awaitTo(User.find({workType}).exec());
+    getCategoryItems=async({category,city})=>{
+         return awaitTo(User.find({workType:category,city}).exec());
     }
 
     update=async(data,{id,phone})=>{
+         console.log(data,id);
          await User.findByIdAndUpdate(id,{...data}).exec();
          return this.getUserByPhone(phone);
     }

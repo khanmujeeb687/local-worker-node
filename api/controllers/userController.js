@@ -1,13 +1,18 @@
 const UserRepository = require('../repositories/userRepository');
 const jwt  = require('jsonwebtoken');
 const jwtConfig = require('../config/jwt');
+const User = require('../models/user');
+const awaitTo=require('async-await-error-handling');
+const mongoose = require('mongoose');
+
+
 
 class UserController {
 
     async getUserCategories(req,res,next){
         const {city} = req.params;
         if(!city) return res.json({error:'no city provided'});
-        const [data,error] =await UserRepository.getUsersPerLocation(city);
+        const [error,data] =await UserRepository.getUsersPerLocation(city);
         return error?res.json({
             error:error.toString()
         }):res.json({
@@ -17,14 +22,26 @@ class UserController {
 
      createUser=async(req,res,next)=>{
         const {phone} = req.body;
+        const [error,data1] = await UserRepository.getUserByPhone(phone);
+        if(error){
+            return res.json({
+                error:err.toString()
+            });
+        }
+         if(data1.length>0){
+             return res.json({
+             data:{...data1[0]._doc,jwtToken:this.generateJwtToken(phone,data1[0]._id)}
+         });
+         }
         const user = new User({
+            _id:new mongoose.Types.ObjectId(),
             phone
         });
-        const [data,error ] = await awaitTo(user.save());
-        return error?res.json({
-            error:error.toString()
+        const [err,data] = await awaitTo(user.save());
+        return err?res.json({
+            error:err.toString()
         }):res.json({
-            data:{...data,jwtToken:this.generateJwtToken(phone,data._id)}
+            data:{...data._doc,jwtToken:this.generateJwtToken(phone,data._id)}
         });
 
     }
@@ -36,7 +53,7 @@ class UserController {
 
     async getLoggedInUserDetails(req,res,next){
         const {phone} = req.userData;
-        const [data,error] =await UserRepository.getUserByPhone(phone);
+        const [error,data] =await UserRepository.getUserByPhone(phone);
         return error?res.json({
             error:error.toString()
         }):res.json({
@@ -45,8 +62,7 @@ class UserController {
     }
 
     getCategory=async(req,res,next)=>{
-        const {category} = req.params;
-        const [data,error]=await UserRepository.getCategoryItems(category);
+        const [error,data]=await UserRepository.getCategoryItems(req.params);
         return error?res.json({
             error:error.toString()
         }):res.json({
@@ -56,11 +72,11 @@ class UserController {
 
 
     async updateUser(req,res,next){
-        const [data,error] = await UserRepository.update(res.body,req.userData);
+        const [error,data] = await UserRepository.update(req.body,req.userData);
         return error?res.json({
             error:error.toString()
         }):res.json({
-            data:data
+            data:data[0]
         });
 
     }

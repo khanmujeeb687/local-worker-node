@@ -13,7 +13,7 @@ router.post('/search/:query', userController.search);
 
 router.get('/details',[checkAuth], userController.getLoggedInUserDetails);
 
-router.get('/:category', userController.getCategory);
+router.get('/:category/:city', userController.getCategory);
 
 router.patch('/',[checkAuth],userController.updateUser);
 
