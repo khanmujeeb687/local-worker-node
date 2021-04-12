@@ -6,13 +6,16 @@ const mongoose =require('mongoose');
 const userRoute = require('./api/routes/user');
 
 
-// mongoose.connect("mongodb+srv://mujeeb_khan:"+process.env.MONGO_ATLAS_PWD+
-//     '@servemax.kpqax.mongodb.net/servemax?retryWrites=true&w=majority',{
-//   useNewUrlParser: true,
-//   useCreateIndex: true,
-//   useFindAndModify: false,
-//   useUnifiedTopology: true });
-// mongoose.Promise=global.Promise;
+mongoose.connect("mongodb+srv://mujeeb_localist:"+process.env.MONGO_ATLAS_PWD+"@localist.3xrxg.mongodb.net/localist?retryWrites=true&w=majority",{
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true }).then(data=>{
+    console.log('connected to mongodb');
+}).catch(e=>{
+  console.log(e.toString());
+});
+mongoose.Promise=global.Promise;
 
 
 

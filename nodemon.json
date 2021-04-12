@@ -1,0 +1,10 @@
+{
+  "env": {
+    "MONGO_USER": "mujeeb_localist",
+    "MONGO_ATLAS_PWD": "MujeebLocalist",
+    "JWT_SECRET": "secret",
+    "FCM_SERVER_TOKEN": "AAAA3bhC03c:APA91bEjCXhhQ-CyQU7mcKZbeKPQwW3wh5zaytv2AyvrfNO5wdIsruw0fu4hiBN6EEgjgujt5A_AmQ6_Na5o6V0tWkHhEF4PdIauOJFDgnp8xtYXfv10TmVkzcDTHd5tlfRIkmQaq5c3"
+  }
+}
+
+
