@@ -47,8 +47,32 @@ class UserController {
     }
 
 
-    async search(){
+    async search(req,res,next){
+        const {query} = req.params;
+        const reEx = new RegExp(query);
 
+        const qEx0={
+            city: {$regex: reEx,  $options: "i"}
+        }
+        const qEx1={
+            name: {$regex: reEx,  $options: "i"}
+        }
+        const qEx2={
+            phone: {$regex: reEx,  $options: "i"}
+        }
+        const qEx3={
+            workType: {$regex: reEx,  $options: "i"}
+        }
+        const qEx4={
+            about: {$regex: reEx,  $options: "i"}
+        }
+
+       const [error,data] = await UserRepository.searchForRegExp([qEx0,qEx1,qEx2,qEx3,qEx4]);
+        return error?res.json({
+            error:error.toString()
+        }):res.json({
+            data:data
+        });
     }
 
     async getLoggedInUserDetails(req,res,next){

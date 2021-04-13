@@ -27,6 +27,21 @@ class userRepository {
          return this.getUserByPhone(phone);
     }
 
+    searchForRegExp=async(reg)=>{
+         const promises=[];
+         for(let i =0;i<reg.length;i++){
+             const data = awaitTo(User.find(reg[i]).exec());
+             promises.push(data);
+         }
+         const resData = await Promise.all(promises);
+         let rep=[];
+         for(let j=0;j<resData.length;j++){
+             if(resData[j].length>0)
+                rep = rep.concat(resData[j][1]);
+         }
+         return ['',rep];
+    }
+
 }
 
 module.exports = new userRepository();
