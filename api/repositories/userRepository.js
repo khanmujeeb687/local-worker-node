@@ -4,11 +4,16 @@ const types = require('../values/constants');
 
 class userRepository {
 
+    queryCityData=async(city)=>{
+        const [er,data]=await awaitTo(User.find({city}).exec());
+        if(!er) return ['',this.toCategoryWiseData(data)];
+        return [er,[]];
+    }
 
      getUsersPerLocation=async(city)=>{
-        const [error,data] = types.store[city]?['',types.store[city]]:await awaitTo(User.find({city}).exec());
+        const [error,data] = types.store[city]?['',types.store[city]]:await this.queryCityData(city);
         types.store[city]=data || types.store[city];
-        return [error,data];
+        return [error,types.store[city]];
     }
 
 
@@ -42,6 +47,19 @@ class userRepository {
          return ['',rep];
     }
 
+    toCategoryWiseData=(data)=>{
+        const response={};
+        data.forEach(item=>{
+            item.workType.forEach(element=>{
+                if(response[element]){
+                    response[element].push(item);
+                }else{
+                    response[element]=[item];
+                }
+            });
+        });
+        return response;
+    }
 }
 
 module.exports = new userRepository();

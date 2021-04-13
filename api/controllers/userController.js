@@ -90,7 +90,10 @@ class UserController {
         return error?res.json({
             error:error.toString()
         }):res.json({
-            data:data
+            data:{
+                name:req.params.category,
+                users:data
+            }
         });
     }
 
