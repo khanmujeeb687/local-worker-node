@@ -9,6 +9,8 @@ router.get('/api/:city', userController.getUserCategories);
 
 router.post('/', userController.createUser);
 
+router.post('/login', userController.login);
+
 router.post('/search/:query', userController.search);
 
 router.get('/details',[checkAuth], userController.getLoggedInUserDetails);

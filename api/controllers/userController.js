@@ -21,7 +21,7 @@ class UserController {
     }
 
      createUser=async(req,res,next)=>{
-        const {phone} = req.body;
+        const {phone,city,name,workType} = req.body;
         const [error,data1] = await UserRepository.getUserByPhone(phone);
         if(error){
             return res.json({
@@ -30,12 +30,15 @@ class UserController {
         }
          if(data1.length>0){
              return res.json({
-             data:{...data1[0]._doc,jwtToken:this.generateJwtToken(phone,data1[0]._id)}
-         });
+                 error:'user already exists!'
+             });
          }
         const user = new User({
             _id:new mongoose.Types.ObjectId(),
-            phone
+            phone,
+            city,
+            workType,
+            name
         });
         const [err,data] = await awaitTo(user.save());
         return err?res.json({
@@ -44,6 +47,26 @@ class UserController {
             data:{...data._doc,jwtToken:this.generateJwtToken(phone,data._id)}
         });
 
+    }
+
+
+    login=async(req,res,next)=>{
+        const {phone} = req.body;
+        const [error,data1] = await UserRepository.getUserByPhone(phone);
+        if(error){
+            return res.json({
+                error:err.toString()
+            });
+        }
+        if(data1.length>0){
+            return res.json({
+                data:{...data1[0]._doc,jwtToken:this.generateJwtToken(phone,data1[0]._id)}
+            });
+        }else{
+            return res.json({
+                error:'user not registered!'
+            });
+        }
     }
 
 
