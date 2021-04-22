@@ -4,6 +4,8 @@ const jwtConfig = require('../config/jwt');
 const User = require('../models/user');
 const awaitTo=require('async-await-error-handling');
 const mongoose = require('mongoose');
+const types = require('../values/constants');
+
 
 
 
@@ -137,6 +139,13 @@ class UserController {
             phone,
             id
         }, jwtConfig.secret);
+    }
+
+
+    skills=async(req,res,next)=>{
+        return res.json({
+            data:types.types
+        });
     }
 
 }

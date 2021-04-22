@@ -11,6 +11,8 @@ router.post('/', userController.createUser);
 
 router.post('/login', userController.login);
 
+router.get('/skills', userController.skills);
+
 router.post('/search/:query', userController.search);
 
 router.get('/details',[checkAuth], userController.getLoggedInUserDetails);
