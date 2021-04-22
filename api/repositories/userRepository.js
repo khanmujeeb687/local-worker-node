@@ -11,9 +11,7 @@ class userRepository {
     }
 
      getUsersPerLocation=async(city)=>{
-        const [error,data] = types.store[city]?['',types.store[city]]:await this.queryCityData(city);
-        types.store[city]=data || types.store[city];
-        return [error,types.store[city]];
+        return await this.queryCityData(city);
     }
 
 
