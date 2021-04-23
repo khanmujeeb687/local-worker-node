@@ -24,7 +24,7 @@ class UserController {
 
      createUser=async(req,res,next)=>{
         const {phone,city,name,workType} = req.body;
-        if(!phone || !city || !name || workType.length) return res.json({
+        if(!phone || !city || !name || !workType.length) return res.json({
            error:'please provide fields!'
         });
         const [error,data1] = await UserRepository.getUserByPhone(phone);
